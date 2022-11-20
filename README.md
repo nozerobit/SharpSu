@@ -2,13 +2,18 @@
 
 SharpSu lets you switch to another user without asking questions or prompts. It spawns a child console from the parent console in the context of another user. You can then interact with the shell as another user.
 
-> TL;DR: Spawns an interactive shell as a another user within the same console. No new window and no new parent console.
+> TL;DR: Spawns an interactive shell as another user within the same console.
+
+There are two versions of this tool:
+
+- `SharpSu`: Faster but the input is blank.
+- `SharpSu2`: Slower but the input is normal.
 
 Requirement:
 
 - Valid Credentials
 
-***What is the purpose?***
+***What is the purpose of this tool?***
 
 This tool was made as a solution to solve these problems:
 
@@ -30,31 +35,34 @@ run_as.ps1 --Username 'LazyUser' --Password 'test'
 
 3. When you have a shell as a lower-privileged user but want to switch to a higher-privileged user and interact with a console.
 
-> Must tools open up a new console window so if you're in a shell session say a reverse shell with no GUI then you cannot use that other window. 
+> Most tools open up a new console in a new window so if you're in a shell session say a reverse shell with no GUI then you cannot use the other window. 
 
 > However, since this tool spawns a child, you can use the new created console from the reverse shell.
 
 Is simple but useful.
 
+# Detection
+
+This tool spawns a new process so it is not stealthy.
+
 # Important
 
 This tool only works if your current "shell" lets you spawn `cmd.exe` or `powershell.exe`. If your shell doesn't return the output of either of these commands then this tool won't give the output either.
 
-> Note: I'm trying to find a solution for this so this "might" be temporary.
-
-I have another variant of [RunAs in SharpSuite](https://github.com/nozerobit/SharpSuite/tree/main/RunAs) which is another in which you execute commands as another user.
+I have another variant of [RunAs in SharpSuite](https://github.com/nozerobit/SharpSuite/tree/main/RunAs) which is another tool that you can use to execute commands as another user without spawning an interactive process.
 
 # Help Menu
 
 ```powershell
 
-
-███████╗██╗  ██╗ █████╗ ██████╗ ██████╗ ███████╗██╗   ██╗
-██╔════╝██║  ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝██║   ██║
-███████╗███████║███████║██████╔╝██████╔╝███████╗██║   ██║
-╚════██║██╔══██║██╔══██║██╔══██╗██╔═══╝ ╚════██║██║   ██║
-███████║██║  ██║██║  ██║██║  ██║██║     ███████║╚██████╔╝
-╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚══════╝ ╚═════╝
+   _____ _                      _____
+  / ____| |                    / ____|
+ | (___ | |__   __ _ _ __ _ __| (___  _   _
+  \___ \| '_ \ / _` | '__| '_ \\___ \| | | |
+  ____) | | | | (_| | |  | |_) |___) | |_| |
+ |_____/|_| |_|\__,_|_|  | .__/_____/ \__,_|
+                         | |
+                         |_|
 
                    Switch User
                 Author @nozerobit
@@ -80,7 +88,7 @@ Syntax:
 .\SharpSu.exe /user:LazyUser  /pass:'test' /shell:powershell.exe
 ```
 
-# Example Usage
+# SharpSu Example Usage
 
 Here's an example:
 
@@ -127,15 +135,34 @@ Close the shell and program by executing the following command:
 exit
 ```
 
+## SharpSu2 Example Usage
+
+SharpSu2 is slower but has a better output, it uses pipes for input and output:
+
+```powershell
+PS C:\Users\user\Desktop> .\SharpSu2.exe /user:LazyUser3  /pass:'Lazy4#!@@$#%#$^%d*(_)(_)(*()minPwd123!' /shell:powershell.exe
+[+] Created a output pipe for child process
+[+] Handle for output is not inherited
+[+] Created a input pipe for child process
+[+] Handle for input is not inherited
+[+] CreateProcessWithLogonW() succeed!
+[+] Proccess spawned with PID: 11816
+
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Try the new cross-platform PowerShell https://aka.ms/pscore6
+
+PS C:\Windows\system32> whoami
+whoami
+desktop-e2hujdu\lazyuser3
+PS C:\Windows\system32> exit
+exit
+
+Bye!: 0
+
+```
+
 # Screen
 
 ![media](media/CAPTURE.png)
-
-# ToDo
-
-Here's a list of checkbox:
-
-- [ ] Optimize pieces of code
-- [ ] Make a more elegant I/O shell
-
-> Note: This project is open for contributions.
